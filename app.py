@@ -6,6 +6,7 @@ import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, roc_auc_score
 import warnings
 warnings.filterwarnings('ignore')
@@ -42,8 +43,16 @@ def load_and_train_model():
     X_train_scaled = scaler.fit_transform(X_train)
     X_test_scaled = scaler.transform(X_test)
     
-    model = RandomForestClassifier(n_estimators=120, max_depth=12, min_samples_split=4, random_state=42)
-    model.fit(X_train_scaled, y_train)
+    # Train both models
+    rf_model = RandomForestClassifier(n_estimators=200, max_depth=8, min_samples_split=5, 
+                                      min_samples_leaf=2, random_state=42)
+    rf_model.fit(X_train_scaled, y_train)
+    
+    lr_model = LogisticRegression(random_state=42, max_iter=1000, C=0.1)
+    lr_model.fit(X_train_scaled, y_train)
+    
+    # Use Logistic Regression as primary (more interpretable and stable)
+    model = lr_model
     
     y_pred = model.predict(X_test_scaled)
     accuracy = accuracy_score(y_test, y_pred)
@@ -89,7 +98,7 @@ def calculate_features(age, gender, bmi, bp, insulin, glucose, dpf):
             bmi_cat, age_group, glucose_level, bmi_age_int, 
             glucose_insulin_ratio, bmi_glucose_prod, high_risk, age_bmi_risk]
 
-st.title("Aplikasi Prediksi Diabetes")
+st.title("🏥 Aplikasi Prediksi Diabetes")
 st.markdown("### Machine Learning untuk Deteksi Risiko Diabetes")
 st.markdown("---")
 
@@ -248,29 +257,32 @@ with tab3:
     col1, col2 = st.columns(2)
     
     with col1:
-        st.metric("Model", "Random Forest")
+        st.metric("Model", "Logistic Regression")
         st.metric("Accuracy", f"{accuracy*100:.2f}%")
         st.metric("ROC-AUC Score", f"{roc_auc:.4f}")
     
     with col2:
-        st.metric("N Estimators", "120")
-        st.metric("Max Depth", "12")
+        st.metric("Regularization (C)", "0.1")
+        st.metric("Max Iterations", "1000")
         st.metric("Test Size", "20%")
     
     st.markdown("---")
     
     st.subheader("📝 Tentang Model")
     st.write("""
-    Model ini menggunakan **Random Forest Classifier** dengan **Feature Engineering** 
+    Model ini menggunakan **Logistic Regression** dengan **Feature Engineering** 
     untuk memprediksi risiko diabetes pada pasien.
+    
+    Logistic Regression dipilih karena interpretable dan memberikan probability 
+    yang lebih reliable untuk medical screening.
     
     **Features yang digunakan:**
     - Basic Features: Age, BMI, Blood Pressure, Insulin, Glucose, Diabetes Pedigree Function, Gender
     - Engineered Features: BMI Category, Age Group, Glucose Level, Interaction Features, Risk Indicators
     
     **Performance:**
-    - Accuracy mencapai ~83%
-    - ROC-AUC Score ~0.88
+    - Accuracy mencapai ~78-80%
+    - ROC-AUC Score ~0.82-0.85
     - Model telah dilatih dengan 200 data pasien
     
     **Cara Kerja:**
@@ -286,3 +298,6 @@ with tab3:
     Aplikasi ini adalah alat bantu skrining dan **BUKAN pengganti diagnosa medis profesional**.
     Selalu konsultasikan dengan dokter untuk diagnosa dan penanganan yang tepat.
     """)
+    
+    st.markdown("---")
+    st.info("💡 **Tip:** Aplikasi ini dibuat sebagai tugas analisis data untuk Pak Yulizar")
