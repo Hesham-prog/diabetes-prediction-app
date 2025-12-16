@@ -89,7 +89,7 @@ def calculate_features(age, gender, bmi, bp, insulin, glucose, dpf):
             bmi_cat, age_group, glucose_level, bmi_age_int, 
             glucose_insulin_ratio, bmi_glucose_prod, high_risk, age_bmi_risk]
 
-st.title("🏥 Aplikasi Prediksi Diabetes")
+st.title("Aplikasi Prediksi Diabetes")
 st.markdown("### Machine Learning untuk Deteksi Risiko Diabetes")
 st.markdown("---")
 
