@@ -286,13 +286,3 @@ with tab3:
     Aplikasi ini adalah alat bantu skrining dan **BUKAN pengganti diagnosa medis profesional**.
     Selalu konsultasikan dengan dokter untuk diagnosa dan penanganan yang tepat.
     """)
-    
-    st.markdown("---")
-    st.info("💡 **Tip:** Aplikasi ini dibuat sebagai tugas analisis data untuk Pak Yulizar")
-
-st.markdown("---")
-st.markdown("""
-<div style='text-align: center'>
-    <p>Dibuat dengan ❤️ menggunakan Streamlit | © 2024</p>
-</div>
-""", unsafe_allow_html=True)
